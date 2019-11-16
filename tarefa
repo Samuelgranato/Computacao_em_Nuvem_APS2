@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+
+import requests
+import json
+import sys
+
+
+def tarefa_adicionar(nome):
+    data = {
+        'nome' : nome
+    }
+
+    r = requests.post('http://localhost:5000/Tarefa',params = data)
+    return r
+
+def tarefa_listar():
+    r = requests.get('http://localhost:5000/Tarefa')
+    return r
+
+def tarefa_buscar(id):
+    r = requests.get('http://localhost:5000/Tarefa/{0}'.format(id))
+    return r
+    
+def tarefa_apagar(id):
+    r = requests.delete('http://localhost:5000/Tarefa/{0}'.format(id))
+    return r
+    
+def tarefa_atualizar(id,nome,done):
+    data = {
+        'id' : id,
+        'nome': nome,
+        'done': done
+    }
+
+    r = requests.put('http://localhost:5000/Tarefa/{0}'.format(id),params = data)
+    return r
+    
+
+if __name__ == '__main__':
+    if(len(sys.argv) == 1):
+        print("Comando inválido. \n tarefa --help")
+        exit()
+    if(sys.argv[1] == '--help'):
+        print('''
+Uso: tarefa [METODO]... [ARGUMENTOS]...
+
+
+METODOS:
+
+    adicionar
+        "Adiciona uma tarefa ao server"
+
+            Argumentos:
+                'nome'
+            
+            Exemplo: 'tarefa adicionar 'fazer supermercado''
+
+    listar
+        "Lista todas as tarefas"
+
+    buscar
+        "Busca uma tarefa por id"
+
+            Argumentos:
+                'id'
+
+            Exemplo: 'tarefa buscar 1'
+
+    apagar
+        "Apagar uma tarefa especifica pelo id"
+
+            Argumentos:
+                'id'
+
+            Exemplo: 'tarefa apagar 1'
+
+    atualizar
+        "Atualiza uma tarefa"
+            Argumentos:
+                'id' 'nome' 'done'
+
+            Exemplo: 'tarefa atualizar 1 'fazer acougue' True'
+        ''')
+
+    elif(len(sys.argv) >= 2):
+            if(sys.argv[1] == 'adicionar'):
+                if(len(sys.argv) == 3):
+                    resp = tarefa_adicionar(sys.argv[2])
+                    print(resp.text)
+                else:
+                    print('numero de comandos inválidos')
+
+            
+            elif(sys.argv[1] == 'listar'):
+                if(len(sys.argv) == 2):
+                    resp = tarefa_listar()
+                    print(resp.text)
+                else:
+                    print('numero de comandos inválidos')
+
+            elif(sys.argv[1] == 'buscar'):
+                if(len(sys.argv) == 3):
+                    resp = tarefa_buscar(sys.argv[2])
+                    print(resp.text)
+
+                else:
+                    print('numero de comandos inválidos')
+            
+            elif(sys.argv[1] == 'apagar'):
+                if(len(sys.argv) == 3):
+                    resp  = tarefa_apagar(sys.argv[2])
+                    print(resp.text)
+                else:
+                    print('numero de comandos inválidos')
+            
+            elif(sys.argv[1] == 'atualizar'):
+                if(len(sys.argv) == 5):
+                    resp = tarefa_atualizar(sys.argv[2],sys.argv[3],sys.argv[4])
+                    print(resp.text)
+
+                else:
+                    print('numero de comandos inválidos')
+
+            else:
+                print('Argumentos Inválidos!')
