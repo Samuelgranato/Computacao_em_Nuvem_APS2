@@ -5,7 +5,7 @@ import json
 import sys,os
 
 def get_ip():
-    file = open(os.path.dirname(sys.argv[0])+'/ip', 'r')
+    file = open(os.path.dirname(os.path.realpath(__file__))+'/ip', 'r')
     ip = file.read() 
     file.close()
     return ip 
