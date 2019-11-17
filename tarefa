@@ -2,27 +2,33 @@
 
 import requests
 import json
-import sys
+import sys,os
 
-
+def get_ip():
+    file = open(os.path.dirname(sys.argv[0])+'/ip', 'r')
+    ip = file.read() 
+    file.close()
+    return ip 
+    
 def tarefa_adicionar(nome):
     data = {
         'nome' : nome
     }
 
-    r = requests.post('http://localhost:5000/Tarefa',params = data)
+    r = requests.post('http://'+get_ip()+':5000/Tarefa',params = data)
     return r
 
 def tarefa_listar():
-    r = requests.get('http://localhost:5000/Tarefa')
+    get_ip()
+    r = requests.get('http://'+get_ip()+':5000/Tarefa')
     return r
 
 def tarefa_buscar(id):
-    r = requests.get('http://localhost:5000/Tarefa/{0}'.format(id))
+    r = requests.get('http://'+get_ip()+':5000/Tarefa/{0}'.format(id))
     return r
     
 def tarefa_apagar(id):
-    r = requests.delete('http://localhost:5000/Tarefa/{0}'.format(id))
+    r = requests.delete('http://'+get_ip()+':5000/Tarefa/{0}'.format(id))
     return r
     
 def tarefa_atualizar(id,nome,done):
@@ -32,7 +38,7 @@ def tarefa_atualizar(id,nome,done):
         'done': done
     }
 
-    r = requests.put('http://localhost:5000/Tarefa/{0}'.format(id),params = data)
+    r = requests.put('http://'+get_ip()+':5000/Tarefa/{0}'.format(id),params = data)
     return r
     
 
@@ -44,6 +50,7 @@ if __name__ == '__main__':
         print('''
 Uso: tarefa [METODO]... [ARGUMENTOS]...
 
+O IP do request se encontra no arquivo IP
 
 METODOS:
 
